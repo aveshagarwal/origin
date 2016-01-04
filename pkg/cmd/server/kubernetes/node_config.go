@@ -19,12 +19,14 @@ import (
 	"k8s.io/kubernetes/pkg/util/errors"
 	"k8s.io/kubernetes/pkg/util/oom"
 
+	dockerclient "github.com/fsouza/go-dockerclient"
 	osdnapi "github.com/openshift/openshift-sdn/plugins/osdn/api"
 	"github.com/openshift/openshift-sdn/plugins/osdn/factory"
 	configapi "github.com/openshift/origin/pkg/cmd/server/api"
 	"github.com/openshift/origin/pkg/cmd/server/crypto"
 	cmdutil "github.com/openshift/origin/pkg/cmd/util"
 	"github.com/openshift/origin/pkg/cmd/util/clientcmd"
+	"github.com/openshift/origin/pkg/cmd/util/docker"
 	cmdflags "github.com/openshift/origin/pkg/cmd/util/flags"
 	"github.com/openshift/origin/pkg/cmd/util/variable"
 )
@@ -56,6 +58,8 @@ type NodeConfig struct {
 	// EndpointsFilterer is an optional endpoints filterer
 	FilteringEndpointsHandler osdnapi.FilteringEndpointsConfigHandler
 }
+
+const minimumDockerAPIVersionForParallelPulls = "1.21"
 
 func BuildKubernetesNodeConfig(options configapi.NodeConfig) (*NodeConfig, error) {
 	originClient, _, err := configapi.GetOpenShiftClient(options.MasterKubeConfig)
@@ -147,6 +151,10 @@ func BuildKubernetesNodeConfig(options configapi.NodeConfig) (*NodeConfig, error
 	server.FileCheckFrequency = time.Duration(fileCheckInterval) * time.Second
 	server.PodInfraContainerImage = imageTemplate.ExpandOrDie("pod")
 	server.CPUCFSQuota = true // enable cpu cfs quota enforcement by default
+
+	if ensureDockerAPIVersionForParallelImagePulls(docker.NewHelper(), minimumDockerAPIVersionForParallelPulls) {
+		server.SerializeImagePulls = false // disable serializeImagePulls by default for docker 1.9+
+	}
 
 	// prevents kube from generating certs
 	server.TLSCertFile = options.ServingInfo.ServerCert.CertFile
@@ -279,4 +287,35 @@ func BuildKubernetesNodeConfig(options configapi.NodeConfig) (*NodeConfig, error
 	}
 
 	return config, nil
+}
+
+// ensureDockerAPIVersionForParallelImagePulls returns true if the docker API version
+// is >=1.21, else false.
+func ensureDockerAPIVersionForParallelImagePulls(dh *docker.Helper, version string) bool {
+	dockerClient, _, err := dh.GetClient()
+	if err != nil {
+		return false
+	}
+
+	env, err := dockerClient.Version()
+	if err != nil {
+		return false
+	}
+
+	serverVersionString := env.Get("ApiVersion")
+	serverVersion, err := dockerclient.NewAPIVersion(serverVersionString)
+	if err != nil {
+		return false
+	}
+
+	minimumVersion, err := dockerclient.NewAPIVersion(version)
+	if err != nil {
+		return false
+	}
+
+	if serverVersion.LessThan(minimumVersion) {
+		return false
+	}
+
+	return true
 }
