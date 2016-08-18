@@ -24,11 +24,11 @@ package bootstrap
 
 import (
 	"fmt"
-	"strings"
-	"os"
-	"time"
 	"io/ioutil"
+	"os"
 	"path/filepath"
+	"strings"
+	"time"
 )
 type asset struct {
 	bytes []byte
@@ -36,9 +36,9 @@ type asset struct {
 }
 
 type bindataFileInfo struct {
-	name string
-	size int64
-	mode os.FileMode
+	name    string
+	size    int64
+	mode    os.FileMode
 	modTime time.Time
 }
 
@@ -717,7 +717,7 @@ func examplesImageStreamsImageStreamsCentos7Json() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/image-streams/image-streams-centos7.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -1307,7 +1307,7 @@ func examplesImageStreamsImageStreamsRhel7Json() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/image-streams/image-streams-rhel7.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -1508,7 +1508,7 @@ func examplesDbTemplatesMariadbEphemeralTemplateJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/db-templates/mariadb-ephemeral-template.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -1733,7 +1733,7 @@ func examplesDbTemplatesMariadbPersistentTemplateJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/db-templates/mariadb-persistent-template.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -1969,7 +1969,7 @@ func examplesDbTemplatesMongodbEphemeralTemplateJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/db-templates/mongodb-ephemeral-template.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -2229,7 +2229,7 @@ func examplesDbTemplatesMongodbPersistentTemplateJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/db-templates/mongodb-persistent-template.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -2452,7 +2452,7 @@ func examplesDbTemplatesMysqlEphemeralTemplateJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/db-templates/mysql-ephemeral-template.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -2677,7 +2677,7 @@ func examplesDbTemplatesMysqlPersistentTemplateJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/db-templates/mysql-persistent-template.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -2900,7 +2900,7 @@ func examplesDbTemplatesPostgresqlEphemeralTemplateJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/db-templates/postgresql-ephemeral-template.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -3147,7 +3147,7 @@ func examplesDbTemplatesPostgresqlPersistentTemplateJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/db-templates/postgresql-persistent-template.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -3420,7 +3420,7 @@ func examplesJenkinsPipelineJenkinstemplateJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/jenkins/pipeline/jenkinstemplate.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -3948,7 +3948,7 @@ func examplesJenkinsPipelineSamplepipelineJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/jenkins/pipeline/samplepipeline.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -4462,7 +4462,7 @@ func examplesQuickstartsCakephpMysqlJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/quickstarts/cakephp-mysql.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -4941,7 +4941,7 @@ func examplesQuickstartsDancerMysqlJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/quickstarts/dancer-mysql.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -5424,7 +5424,7 @@ func examplesQuickstartsDjangoPostgresqlJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/quickstarts/django-postgresql.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -5908,7 +5908,7 @@ func examplesQuickstartsNodejsMongodbJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/quickstarts/nodejs-mongodb.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -6445,7 +6445,7 @@ func examplesQuickstartsRailsPostgresqlJson() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "examples/quickstarts/rails-postgresql.json", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -6482,7 +6482,7 @@ func pkgImageAdmissionImagepolicyApiV1DefaultPolicyYaml() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "pkg/image/admission/imagepolicy/api/v1/default-policy.yaml", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info:  info}
+	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
@@ -6505,7 +6505,7 @@ func Asset(name string) ([]byte, error) {
 // It simplifies safe initialization of global variables.
 func MustAsset(name string) []byte {
 	a, err := Asset(name)
-	if (err != nil) {
+	if err != nil {
 		panic("asset: Asset(" + name + "): " + err.Error())
 	}
 
@@ -6594,54 +6594,37 @@ func AssetDir(name string) ([]string, error) {
 }
 
 type bintree struct {
-	Func func() (*asset, error)
+	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
 var _bintree = &bintree{nil, map[string]*bintree{
 	"examples": &bintree{nil, map[string]*bintree{
 		"db-templates": &bintree{nil, map[string]*bintree{
-			"mariadb-ephemeral-template.json": &bintree{examplesDbTemplatesMariadbEphemeralTemplateJson, map[string]*bintree{
-			}},
-			"mariadb-persistent-template.json": &bintree{examplesDbTemplatesMariadbPersistentTemplateJson, map[string]*bintree{
-			}},
-			"mongodb-ephemeral-template.json": &bintree{examplesDbTemplatesMongodbEphemeralTemplateJson, map[string]*bintree{
-			}},
-			"mongodb-persistent-template.json": &bintree{examplesDbTemplatesMongodbPersistentTemplateJson, map[string]*bintree{
-			}},
-			"mysql-ephemeral-template.json": &bintree{examplesDbTemplatesMysqlEphemeralTemplateJson, map[string]*bintree{
-			}},
-			"mysql-persistent-template.json": &bintree{examplesDbTemplatesMysqlPersistentTemplateJson, map[string]*bintree{
-			}},
-			"postgresql-ephemeral-template.json": &bintree{examplesDbTemplatesPostgresqlEphemeralTemplateJson, map[string]*bintree{
-			}},
-			"postgresql-persistent-template.json": &bintree{examplesDbTemplatesPostgresqlPersistentTemplateJson, map[string]*bintree{
-			}},
+			"mariadb-ephemeral-template.json": &bintree{examplesDbTemplatesMariadbEphemeralTemplateJson, map[string]*bintree{}},
+			"mariadb-persistent-template.json": &bintree{examplesDbTemplatesMariadbPersistentTemplateJson, map[string]*bintree{}},
+			"mongodb-ephemeral-template.json": &bintree{examplesDbTemplatesMongodbEphemeralTemplateJson, map[string]*bintree{}},
+			"mongodb-persistent-template.json": &bintree{examplesDbTemplatesMongodbPersistentTemplateJson, map[string]*bintree{}},
+			"mysql-ephemeral-template.json": &bintree{examplesDbTemplatesMysqlEphemeralTemplateJson, map[string]*bintree{}},
+			"mysql-persistent-template.json": &bintree{examplesDbTemplatesMysqlPersistentTemplateJson, map[string]*bintree{}},
+			"postgresql-ephemeral-template.json": &bintree{examplesDbTemplatesPostgresqlEphemeralTemplateJson, map[string]*bintree{}},
+			"postgresql-persistent-template.json": &bintree{examplesDbTemplatesPostgresqlPersistentTemplateJson, map[string]*bintree{}},
 		}},
 		"image-streams": &bintree{nil, map[string]*bintree{
-			"image-streams-centos7.json": &bintree{examplesImageStreamsImageStreamsCentos7Json, map[string]*bintree{
-			}},
-			"image-streams-rhel7.json": &bintree{examplesImageStreamsImageStreamsRhel7Json, map[string]*bintree{
-			}},
+			"image-streams-centos7.json": &bintree{examplesImageStreamsImageStreamsCentos7Json, map[string]*bintree{}},
+			"image-streams-rhel7.json": &bintree{examplesImageStreamsImageStreamsRhel7Json, map[string]*bintree{}},
 		}},
 		"jenkins": &bintree{nil, map[string]*bintree{
 			"pipeline": &bintree{nil, map[string]*bintree{
-				"jenkinstemplate.json": &bintree{examplesJenkinsPipelineJenkinstemplateJson, map[string]*bintree{
-				}},
-				"samplepipeline.json": &bintree{examplesJenkinsPipelineSamplepipelineJson, map[string]*bintree{
-				}},
+				"jenkinstemplate.json": &bintree{examplesJenkinsPipelineJenkinstemplateJson, map[string]*bintree{}},
+				"samplepipeline.json": &bintree{examplesJenkinsPipelineSamplepipelineJson, map[string]*bintree{}},
 			}},
 		}},
 		"quickstarts": &bintree{nil, map[string]*bintree{
-			"cakephp-mysql.json": &bintree{examplesQuickstartsCakephpMysqlJson, map[string]*bintree{
-			}},
-			"dancer-mysql.json": &bintree{examplesQuickstartsDancerMysqlJson, map[string]*bintree{
-			}},
-			"django-postgresql.json": &bintree{examplesQuickstartsDjangoPostgresqlJson, map[string]*bintree{
-			}},
-			"nodejs-mongodb.json": &bintree{examplesQuickstartsNodejsMongodbJson, map[string]*bintree{
-			}},
-			"rails-postgresql.json": &bintree{examplesQuickstartsRailsPostgresqlJson, map[string]*bintree{
-			}},
+			"cakephp-mysql.json": &bintree{examplesQuickstartsCakephpMysqlJson, map[string]*bintree{}},
+			"dancer-mysql.json": &bintree{examplesQuickstartsDancerMysqlJson, map[string]*bintree{}},
+			"django-postgresql.json": &bintree{examplesQuickstartsDjangoPostgresqlJson, map[string]*bintree{}},
+			"nodejs-mongodb.json": &bintree{examplesQuickstartsNodejsMongodbJson, map[string]*bintree{}},
+			"rails-postgresql.json": &bintree{examplesQuickstartsRailsPostgresqlJson, map[string]*bintree{}},
 		}},
 	}},
 	"pkg": &bintree{nil, map[string]*bintree{
@@ -6650,8 +6633,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 				"imagepolicy": &bintree{nil, map[string]*bintree{
 					"api": &bintree{nil, map[string]*bintree{
 						"v1": &bintree{nil, map[string]*bintree{
-							"default-policy.yaml": &bintree{pkgImageAdmissionImagepolicyApiV1DefaultPolicyYaml, map[string]*bintree{
-							}},
+							"default-policy.yaml": &bintree{pkgImageAdmissionImagepolicyApiV1DefaultPolicyYaml, map[string]*bintree{}},
 						}},
 					}},
 				}},
@@ -6662,48 +6644,48 @@ var _bintree = &bintree{nil, map[string]*bintree{
 
 // RestoreAsset restores an asset under the given directory
 func RestoreAsset(dir, name string) error {
-        data, err := Asset(name)
-        if err != nil {
-                return err
-        }
-        info, err := AssetInfo(name)
-        if err != nil {
-                return err
-        }
-        err = os.MkdirAll(_filePath(dir, filepath.Dir(name)), os.FileMode(0755))
-        if err != nil {
-                return err
-        }
-        err = ioutil.WriteFile(_filePath(dir, name), data, info.Mode())
-        if err != nil {
-                return err
-        }
-        err = os.Chtimes(_filePath(dir, name), info.ModTime(), info.ModTime())
-        if err != nil {
-                return err
-        }
-        return nil
+	data, err := Asset(name)
+	if err != nil {
+		return err
+	}
+	info, err := AssetInfo(name)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(_filePath(dir, filepath.Dir(name)), os.FileMode(0755))
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(_filePath(dir, name), data, info.Mode())
+	if err != nil {
+		return err
+	}
+	err = os.Chtimes(_filePath(dir, name), info.ModTime(), info.ModTime())
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // RestoreAssets restores an asset under the given directory recursively
 func RestoreAssets(dir, name string) error {
-        children, err := AssetDir(name)
-        // File
-        if err != nil {
-                return RestoreAsset(dir, name)
-        }
-        // Dir
-        for _, child := range children {
-                err = RestoreAssets(dir, filepath.Join(name, child))
-                if err != nil {
-                        return err
-                }
-        }
-        return nil
+	children, err := AssetDir(name)
+	// File
+	if err != nil {
+		return RestoreAsset(dir, name)
+	}
+	// Dir
+	for _, child := range children {
+		err = RestoreAssets(dir, filepath.Join(name, child))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func _filePath(dir, name string) string {
-        cannonicalName := strings.Replace(name, "\\", "/", -1)
-        return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
+	cannonicalName := strings.Replace(name, "\\", "/", -1)
+	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
 
