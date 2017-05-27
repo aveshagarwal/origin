@@ -80,12 +80,18 @@ function image() {
 	return 0
 }
 
+# determine the correct tag prefix
+tag_prefix="${OS_IMAGE_PREFIX:-"openshift/origin"}"
+
+if [[ -n ${OS_BUILD_IMAGE_DIR:-} ]]; then
+  if [[ -n ${OS_IMAGE_SUFFIX:-} ]]; then
+	  tag_prefix="${tag_prefix}-${OS_IMAGE_SUFFIX}"
+  fi
+  image "${tag_prefix}   "${OS_BUILD_IMAGE_DIR}"
+else
 # Link or copy image binaries to the appropriate locations.
 ln_or_cp "${OS_OUTPUT_BINPATH}/linux/amd64/hello-openshift" examples/hello-openshift/bin
 ln_or_cp "${OS_OUTPUT_BINPATH}/linux/amd64/gitserver"       examples/gitserver/bin
-
-# determine the correct tag prefix
-tag_prefix="${OS_IMAGE_PREFIX:-"openshift/origin"}"
 
 # images that depend on "${tag_prefix}-source"
 image "${tag_prefix}-pod"                   images/pod
@@ -108,6 +114,7 @@ image "openshift/openvswitch"               images/openvswitch
 
 # extra images (not part of infrastructure)
 image "openshift/hello-openshift"           examples/hello-openshift
+fi
 
 echo
 
