@@ -87,7 +87,7 @@ if [[ -n ${OS_BUILD_IMAGE_DIR:-} ]]; then
   if [[ -n ${OS_IMAGE_SUFFIX:-} ]]; then
 	  tag_prefix="${tag_prefix}-${OS_IMAGE_SUFFIX}"
   fi
-  image "${tag_prefix}   "${OS_BUILD_IMAGE_DIR}"
+image "${tag_prefix}"   "${OS_BUILD_IMAGE_DIR}"
 else
 # Link or copy image binaries to the appropriate locations.
 ln_or_cp "${OS_OUTPUT_BINPATH}/linux/amd64/hello-openshift" examples/hello-openshift/bin
