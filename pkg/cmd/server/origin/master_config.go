@@ -674,11 +674,26 @@ func newAdmissionChain(pluginNames []string, admissionConfigFilename string, plu
 			if err != nil {
 				return nil, err
 			}
+			glog.Infof("Avesh: %v", pluginName)
 
-			plugin, err = admissionregistry.OriginAdmissionPlugins.InitPlugin(pluginName, pluginConfigReader, admissionInitializer)
-			if err != nil {
-				// should have been caught with validation
-				return nil, err
+			enabled, isDefault := admissionregistry.IsAdmissionPluginActivated(pluginName, pluginConfigReader)
+
+			glog.Infof("Avesh: %v", pluginConfigReader)
+			if enabled {
+				glog.Infof("Avesh: enabled")
+				if isDefault {
+					glog.Infof("Avesh: default")
+					pluginConfigReader = nil
+				}
+
+				plugin, err = admissionregistry.OriginAdmissionPlugins.InitPlugin(pluginName, pluginConfigReader, admissionInitializer)
+				if err != nil {
+					glog.Infof("Avesh: %v", err)
+					// should have been caught with validation
+					return nil, err
+				}
+			} else {
+				plugin = nil
 			}
 			if plugin == nil {
 				continue
