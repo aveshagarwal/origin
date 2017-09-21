@@ -135,11 +135,18 @@ func IsAdmissionPluginActivated(name string, config io.Reader) (bool, bool) {
 			glog.V(2).Infof("Admission plugin %v is disabled.  It will not be started.", name)
 			return false, isDefault
 		}
+		if err != nil {
+			glog.Infof("Avesh: err1: %v", err)
+		}
 	} else if DefaultOffPlugins.Has(name) {
 		if enabled, isDefault, err = configlatest.IsAdmissionPluginActivated(config, false); err == nil && !enabled {
 			glog.V(2).Infof("Admission plugin %v is not enabled.  It will not be started.", name)
 			return false, isDefault
 		}
+		if err != nil {
+			glog.Infof("Avesh: err2: %v", err)
+		}
+
 	}
 
 	return true, isDefault

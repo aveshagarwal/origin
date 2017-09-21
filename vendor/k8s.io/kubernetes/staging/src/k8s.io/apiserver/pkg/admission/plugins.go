@@ -92,6 +92,7 @@ func (ps *Plugins) getPlugin(name string, config io.Reader) (Interface, bool, er
 
 	config1, config2, err := splitStream(config)
 	if err != nil {
+		glog.Infof("Avesh getplugin 1: %v", err)
 		return nil, true, err
 	}
 	if !PluginEnabledFn(name, config1) {
@@ -99,6 +100,7 @@ func (ps *Plugins) getPlugin(name string, config io.Reader) (Interface, bool, er
 	}
 
 	ret, err := f(config2)
+	glog.Infof("Avesh getplugin 2: %v", err)
 	return ret, true, err
 }
 
@@ -143,7 +145,7 @@ func (ps *Plugins) InitPlugin(name string, config io.Reader, pluginInitializer P
 		glog.Info("No admission plugin specified.")
 		return nil, nil
 	}
-
+	glog.Infof("Avesh IP 1: %v", name)
 	plugin, found, err := ps.getPlugin(name, config)
 	if err != nil {
 		return nil, fmt.Errorf("Couldn't init admission plugin %q: %v", name, err)
