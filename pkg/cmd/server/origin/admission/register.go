@@ -135,3 +135,17 @@ func IsAdmissionPluginActivated(name string, config io.Reader) (bool, bool) {
 	}
 	return true, isDefault
 }
+
+func IsAdmissionPluginEnabled(name string, pluginConfigReader io.Reader) (bool, io.Reader, error) {
+	input, output, err := configlatest.SplitStream(pluginConfigReader)
+	if err != nil {
+		// should have been caught with validation
+		return false, nil, err
+	}
+
+	enabled, isDefault := IsAdmissionPluginActivated(name, input)
+	if isDefault {
+		output = nil
+	}
+	return enabled, output, nil
+}
