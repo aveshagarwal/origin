@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/ghodss/yaml"
+	"github.com/golang/glog"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	kyaml "k8s.io/apimachinery/pkg/util/yaml"
@@ -86,8 +87,10 @@ func ReadYAML(reader io.Reader) (runtime.Object, error) {
 	}
 	data, err := ioutil.ReadAll(reader)
 	if err != nil {
+		glog.Infof("Avesh ReadYAML:%v", err)
 		return nil, err
 	}
+	glog.Infof("Avesh ReadYAML: data :%v", data)
 	jsonData, err := kyaml.ToJSON(data)
 	if err != nil {
 		return nil, err
