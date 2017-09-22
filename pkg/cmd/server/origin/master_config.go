@@ -72,6 +72,7 @@ import (
 	osclient "github.com/openshift/origin/pkg/client"
 	oadmission "github.com/openshift/origin/pkg/cmd/server/admission"
 	configapi "github.com/openshift/origin/pkg/cmd/server/api"
+	configlatest "github.com/openshift/origin/pkg/cmd/server/api/latest"
 	"github.com/openshift/origin/pkg/cmd/server/bootstrappolicy"
 	kubernetes "github.com/openshift/origin/pkg/cmd/server/kubernetes/master"
 	admissionregistry "github.com/openshift/origin/pkg/cmd/server/origin/admission"
@@ -676,7 +677,21 @@ func newAdmissionChain(pluginNames []string, admissionConfigFilename string, plu
 			}
 			glog.Infof("Avesh: %v", pluginName)
 
+			_, err1 := configlatest.ReadYAML(pluginConfigReader)
+			if err1 != nil {
+				glog.Infof("Avesh before master-config ReadYAML:%v", err1)
+			}
+
+			glog.Infof("Avesh before master-config ReadYAML")
 			enabled, isDefault := admissionregistry.IsAdmissionPluginActivated(pluginName, pluginConfigReader)
+
+			glog.Infof("Avesh after master-config ReadYAML")
+			_, err2 := configlatest.ReadYAML(pluginConfigReader)
+			if err2 != nil {
+				glog.Infof("Avesh after master-config ReadYAML:%v", err2)
+			}
+
+			glog.Infof("Avesh after master-config ReadYAML")
 
 			glog.Infof("Avesh: %v", pluginConfigReader)
 			if enabled {
@@ -684,6 +699,11 @@ func newAdmissionChain(pluginNames []string, admissionConfigFilename string, plu
 				if isDefault {
 					glog.Infof("Avesh: default")
 					pluginConfigReader = nil
+				}
+
+				_, err := configlatest.ReadYAML(pluginConfigReader)
+				if err != nil {
+					glog.Infof("Avesh master-config ReadYAML:%v", err)
 				}
 
 				plugin, err = admissionregistry.OriginAdmissionPlugins.InitPlugin(pluginName, pluginConfigReader, admissionInitializer)

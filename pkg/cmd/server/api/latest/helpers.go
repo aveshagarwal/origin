@@ -161,3 +161,17 @@ func IsAdmissionPluginActivated(reader io.Reader, defaultValue bool) (bool, bool
 
 	return !activationConfig.Disable, true, nil
 }
+
+// SplitStream reads the stream bytes and constructs two copies of it.
+func SplitStream(config io.Reader) (io.Reader, io.Reader, error) {
+	if config == nil || reflect.ValueOf(config).IsNil() {
+		return nil, nil, nil
+	}
+
+	configBytes, err := ioutil.ReadAll(config)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return bytes.NewBuffer(configBytes), bytes.NewBuffer(configBytes), nil
+}
