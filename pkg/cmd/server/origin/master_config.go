@@ -72,6 +72,7 @@ import (
 	osclient "github.com/openshift/origin/pkg/client"
 	oadmission "github.com/openshift/origin/pkg/cmd/server/admission"
 	configapi "github.com/openshift/origin/pkg/cmd/server/api"
+	configlatest "github.com/openshift/origin/pkg/cmd/server/api/latest"
 	"github.com/openshift/origin/pkg/cmd/server/bootstrappolicy"
 	kubernetes "github.com/openshift/origin/pkg/cmd/server/kubernetes/master"
 	admissionregistry "github.com/openshift/origin/pkg/cmd/server/origin/admission"
@@ -675,11 +676,28 @@ func newAdmissionChain(pluginNames []string, admissionConfigFilename string, plu
 				return nil, err
 			}
 
-			plugin, err = admissionregistry.OriginAdmissionPlugins.InitPlugin(pluginName, pluginConfigReader, admissionInitializer)
-			if err != nil {
+			pcr1, pcr2, err1 := configlatest.SplitStream(pluginConfigReader)
+			if err1 != nil {
 				// should have been caught with validation
-				return nil, err
+				return nil, err1
 			}
+
+			enabled, isDefault := admissionregistry.IsAdmissionPluginActivated(pluginName, pcr1)
+
+			if enabled {
+				if isDefault {
+					pcr2 = nil
+				}
+
+				plugin, err = admissionregistry.OriginAdmissionPlugins.InitPlugin(pluginName, pcr2, admissionInitializer)
+				if err != nil {
+					// should have been caught with validation
+					return nil, err
+				}
+			} else {
+				plugin = nil
+			}
+
 			if plugin == nil {
 				continue
 			}

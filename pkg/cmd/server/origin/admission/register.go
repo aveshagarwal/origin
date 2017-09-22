@@ -117,24 +117,21 @@ var (
 	)
 )
 
-func init() {
-	admission.PluginEnabledFn = IsAdmissionPluginActivated
-}
-
-func IsAdmissionPluginActivated(name string, config io.Reader) bool {
+func IsAdmissionPluginActivated(name string, config io.Reader) (bool, bool) {
 	// only intercept if we have an explicit enable or disable.  If the check fails in any way,
 	// assume that the config was a different type and let the actual admission plugin check it
+	var enabled, isDefault bool
+	var err error
 	if DefaultOnPlugins.Has(name) {
-		if enabled, err := configlatest.IsAdmissionPluginActivated(config, true); err == nil && !enabled {
+		if enabled, isDefault, err = configlatest.IsAdmissionPluginActivated(config, true); err == nil && !enabled {
 			glog.V(2).Infof("Admission plugin %v is disabled.  It will not be started.", name)
-			return false
+			return false, isDefault
 		}
 	} else if DefaultOffPlugins.Has(name) {
-		if enabled, err := configlatest.IsAdmissionPluginActivated(config, false); err == nil && !enabled {
+		if enabled, isDefault, err = configlatest.IsAdmissionPluginActivated(config, false); err == nil && !enabled {
 			glog.V(2).Infof("Admission plugin %v is not enabled.  It will not be started.", name)
-			return false
+			return false, isDefault
 		}
 	}
-
-	return true
+	return true, isDefault
 }

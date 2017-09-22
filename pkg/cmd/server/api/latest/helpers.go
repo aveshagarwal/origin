@@ -1,6 +1,7 @@
 package latest
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -140,21 +141,36 @@ func captureSurroundingJSONForError(prefix string, data []byte, err error) error
 
 // IsAdmissionPluginActivated returns true if the admission plugin is activated using configapi.DefaultAdmissionConfig
 // otherwise it returns a default value
-func IsAdmissionPluginActivated(reader io.Reader, defaultValue bool) (bool, error) {
+func IsAdmissionPluginActivated(reader io.Reader, defaultValue bool) (bool, bool, error) {
 	obj, err := ReadYAML(reader)
 	if err != nil {
-		return false, err
+		return false, false, err
 	}
 	if obj == nil {
-		return defaultValue, nil
+		return defaultValue, false, nil
 	}
 	activationConfig, ok := obj.(*configapi.DefaultAdmissionConfig)
 	if !ok {
 		// if we failed the cast, then we've got a config object specified for this admission plugin
 		// that means that this must be enabled and all additional validation is up to the
 		// admission plugin itself
-		return true, nil
+		return true, false, nil
 	}
 
-	return !activationConfig.Disable, nil
+	return !activationConfig.Disable, true, nil
+}
+
+// SplitStream reads the stream bytes and constructs two copies of it.
+// (copied from kubernetes)
+func SplitStream(config io.Reader) (io.Reader, io.Reader, error) {
+	if config == nil || reflect.ValueOf(config).IsNil() {
+		return nil, nil, nil
+	}
+
+	configBytes, err := ioutil.ReadAll(config)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return bytes.NewBuffer(configBytes), bytes.NewBuffer(configBytes), nil
 }
