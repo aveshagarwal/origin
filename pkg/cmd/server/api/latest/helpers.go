@@ -1,7 +1,6 @@
 package latest
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -15,6 +14,17 @@ import (
 	kyaml "k8s.io/apimachinery/pkg/util/yaml"
 
 	configapi "github.com/openshift/origin/pkg/cmd/server/api"
+)
+
+type AdmissionPluginInitMode int
+
+const (
+	// Disabled by default or with DefaultAdmissionConfig
+	Disabled AdmissionPluginInitMode = iota
+	// Enabled by default or with CustomConfig
+	Enabled
+	// Enabled with DefaultAdmissionConfig
+	EnabledWithDefaultAdmissionConfig
 )
 
 func ReadSessionSecrets(filename string) (*configapi.SessionSecrets, error) {
@@ -143,36 +153,30 @@ func captureSurroundingJSONForError(prefix string, data []byte, err error) error
 // otherwise it returns a default value
 // It also returns true if configapi.DefaultAdmissionConfig is passed or false if the admission plugin's
 // configuration is passed to avoid passing configapi.DefaultAdmissionConfig to admission plugins.
-func IsAdmissionPluginActivated(reader io.Reader, defaultValue bool) (bool, bool, error) {
+func IsAdmissionPluginActivated(reader io.Reader, defaultValue bool) AdmissionPluginInitMode {
 	obj, err := ReadYAML(reader)
 	if err != nil {
-		return false, false, err
+		fmt.Errorf("error reading admission plugin config: %v", err)
+		return Disabled
 	}
 	if obj == nil {
-		return defaultValue, false, nil
+		if defaultValue {
+			return Enabled
+		} else {
+			return Disabled
+		}
 	}
 	activationConfig, ok := obj.(*configapi.DefaultAdmissionConfig)
 	if !ok {
 		// if we failed the cast, then we've got a config object specified for this admission plugin
 		// that means that this must be enabled and all additional validation is up to the
 		// admission plugin itself
-		return true, false, nil
+		return Enabled
 	}
 
-	return !activationConfig.Disable, true, nil
-}
-
-// SplitStream reads the stream bytes and constructs two copies of it.
-// This is copied from kubernetes
-func SplitStream(config io.Reader) (io.Reader, io.Reader, error) {
-	if config == nil || reflect.ValueOf(config).IsNil() {
-		return nil, nil, nil
+	if activationConfig.Disable {
+		return Disabled
 	}
 
-	configBytes, err := ioutil.ReadAll(config)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return bytes.NewBuffer(configBytes), bytes.NewBuffer(configBytes), nil
+	return EnabledWithDefaultAdmissionConfig
 }

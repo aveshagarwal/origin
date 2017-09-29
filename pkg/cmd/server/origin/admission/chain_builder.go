@@ -296,18 +296,19 @@ func newAdmissionChain(pluginNames []string, admissionConfigFilename string, plu
 				return nil, err
 			}
 
-			plugin = nil
 			enabled, pluginConfigReaderCopy, err := IsAdmissionPluginEnabled(pluginName, pluginConfigReader)
 			if err != nil {
 				return nil, err
 			}
 
-			if enabled {
-				plugin, err = OriginAdmissionPlugins.InitPlugin(pluginName, pluginConfigReaderCopy, admissionInitializer)
-				if err != nil {
-					// should have been caught with validation
-					return nil, err
-				}
+			if !enabled {
+				continue
+			}
+
+			plugin, err = OriginAdmissionPlugins.InitPlugin(pluginName, pluginConfigReaderCopy, admissionInitializer)
+			if err != nil {
+				// should have been caught with validation
+				return nil, err
 			}
 
 			if plugin == nil {
