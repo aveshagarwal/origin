@@ -296,11 +296,7 @@ func newAdmissionChain(pluginNames []string, admissionConfigFilename string, plu
 				return nil, err
 			}
 
-			enabled, pluginConfigReaderCopy, err := IsAdmissionPluginEnabled(pluginName, pluginConfigReader)
-			if err != nil {
-				return nil, err
-			}
-
+			enabled, pluginConfigReaderCopy := IsAdmissionPluginActivated(pluginName, pluginConfigReader)
 			if !enabled {
 				continue
 			}

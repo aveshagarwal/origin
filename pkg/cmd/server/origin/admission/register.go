@@ -120,37 +120,33 @@ var (
 	)
 )
 
-func IsAdmissionPluginActivated(name string, config io.Reader) configlatest.AdmissionPluginInitMode {
+// IsAdmissionPluginActivated returns true if the admission plugin has to be enabled otherwise false.
+// It also returns plugin config reader as nill if DefaultAdmissionConfig is passed, otherwise it
+// returns the same copy of passed plugin config reader.
+func IsAdmissionPluginActivated(name string, pluginConfigReader io.Reader) (bool, io.Reader) {
+	input, output, err := splitStream(pluginConfigReader)
+	if err != nil {
+		return false, nil
+	}
+
 	// only intercept if we have an explicit enable or disable.  If the check fails in any way,
 	// assume that the config was a different type and let the actual admission plugin check it
 	var initMode configlatest.AdmissionPluginInitMode
 	if DefaultOnPlugins.Has(name) {
-		if initMode = configlatest.IsAdmissionPluginActivated(config, true); initMode == configlatest.Disabled {
+		if initMode = configlatest.IsAdmissionPluginActivated(input, true); initMode == configlatest.Disabled {
 			glog.V(2).Infof("Admission plugin %v is disabled.  It will not be started.", name)
 		}
 	} else if DefaultOffPlugins.Has(name) {
-		if initMode = configlatest.IsAdmissionPluginActivated(config, false); initMode == configlatest.Disabled {
+		if initMode = configlatest.IsAdmissionPluginActivated(input, false); initMode == configlatest.Disabled {
 			glog.V(2).Infof("Admission plugin %v is not enabled.  It will not be started.", name)
 		}
 	}
-	return initMode
-}
 
-// IsAdmissionPluginEnabled returns true if the admission plugin has to be enabled otherwise false.
-// It also returns plugin config reader as nill if DefaultAdmissionConfig is passed, otherwise it
-// returns the same copy of passed plugin config reader.
-func IsAdmissionPluginEnabled(name string, pluginConfigReader io.Reader) (bool, io.Reader, error) {
-	input, output, err := splitStream(pluginConfigReader)
-	if err != nil {
-		return false, nil, err
-	}
-
-	initMode := IsAdmissionPluginActivated(name, input)
 	if initMode == configlatest.EnabledWithDefaultAdmissionConfig {
 		output = nil
 	}
 
-	return initMode == configlatest.Disabled, output, nil
+	return initMode == configlatest.Disabled, output
 }
 
 // splitStream reads the stream bytes and constructs two copies of it.
