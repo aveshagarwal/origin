@@ -177,6 +177,7 @@ func (ds *dockerService) getContainerLogPath(containerID string) (string, string
 // createContainerLogSymlink creates the symlink for docker container log.
 func (ds *dockerService) createContainerLogSymlink(containerID string) error {
 	path, realPath, err := ds.getContainerLogPath(containerID)
+	glog.Infof("\n\nAvesh**************************************************createContainerLogSymlink: path: %v, realPath:%v\n\n", path, realPath)
 	if err != nil {
 		return fmt.Errorf("failed to get container %q log path: %v", containerID, err)
 	}
@@ -190,10 +191,10 @@ func (ds *dockerService) createContainerLogSymlink(containerID string) error {
 		// Only create the symlink when container log path is specified and log file exists.
 		// Delete possibly existing file first
 		if err = ds.os.Remove(path); err == nil {
-			glog.Warningf("Deleted previously existing symlink file: %q", path)
+			glog.Warningf("\n\nAvesh******************************************Deleted previously existing symlink file: %q\n\n", path)
 		}
 		if err = ds.os.Symlink(realPath, path); err != nil {
-			return fmt.Errorf("failed to create symbolic link %q to the container log file %q for container %q: %v",
+			return fmt.Errorf("\n\nAvesh****************************************failed to create symbolic link %q to the container log file %q for container %q: %v\n\n",
 				path, realPath, containerID, err)
 		}
 	} else {
@@ -233,6 +234,8 @@ func (ds *dockerService) removeContainerLogSymlink(containerID string) error {
 func (ds *dockerService) StartContainer(containerID string) error {
 	err := ds.client.StartContainer(containerID)
 
+	//glog.Infof("**********************************************************Avesh: create symlink\n")
+	//time.Sleep(10 * time.Second)
 	// Create container log symlink for all containers (including failed ones).
 	if linkError := ds.createContainerLogSymlink(containerID); linkError != nil {
 		// Do not stop the container if we failed to create symlink because:

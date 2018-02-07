@@ -376,6 +376,9 @@ type podActions struct {
 	// the key is the container ID of the container, while
 	// the value contains necessary information to kill a container.
 	ContainersToKill map[kubecontainer.ContainerID]containerToKillInfo
+	// Complete remaining stuff for containers already started, for example,
+	//creating symlink to log file in case the symlink was not created due to failures
+	//DoRemainingTasksForContainers []int
 }
 
 // podSandboxChanged checks whether the spec of the pod is changed and returns
@@ -496,6 +499,15 @@ func (m *kubeGenericRuntimeManager) computePodActions(pod *v1.Pod, podStatus *ku
 	for idx, container := range pod.Spec.Containers {
 		containerStatus := podStatus.FindContainerStatusByName(container.Name)
 
+		if containerStatus != nil &&
+			(containerStatus.State == kubecontainer.ContainerStateRunning ||
+				containerStatus.State == kubecontainer.ContainerStateExited) {
+
+			if err := m.createContainerLogIfNotExist(containerStatus.ID.ID); err != nil {
+				glog.Errorf("failed to create symlinks to logs: %v", err)
+			}
+
+		}
 		// Call internal container post-stop lifecycle hook for any non-running container so that any
 		// allocated cpus are released immediately. If the container is restarted, cpus will be re-allocated
 		// to it.

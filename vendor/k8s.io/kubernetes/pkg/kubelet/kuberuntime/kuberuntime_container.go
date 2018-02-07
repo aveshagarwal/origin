@@ -147,6 +147,7 @@ func (m *kubeGenericRuntimeManager) startContainer(podSandboxID string, podSandb
 	legacySymlink := legacyLogSymlink(containerID, containerMeta.Name, sandboxMeta.Name,
 		sandboxMeta.Namespace)
 	containerLog := filepath.Join(podSandboxConfig.LogDirectory, containerConfig.LogPath)
+	glog.Infof("\n\n#################################Avesh: container Log file %v, legacy symlink: %v\n\n", containerLog, legacySymlink)
 	if err := m.osInterface.Symlink(containerLog, legacySymlink); err != nil {
 		glog.Errorf("Failed to create legacy symbolic link %q to container %q log %q: %v",
 			legacySymlink, containerID, containerLog, err)
@@ -841,6 +842,7 @@ func (m *kubeGenericRuntimeManager) removeContainerLog(containerID string) error
 	labeledInfo := getContainerInfoFromLabels(status.Labels)
 	annotatedInfo := getContainerInfoFromAnnotations(status.Annotations)
 	path := buildFullContainerLogsPath(labeledInfo.PodUID, labeledInfo.ContainerName, annotatedInfo.RestartCount)
+	glog.Infof("\n\n****************************************************Avesh remove full path: %v\n\n", path)
 	if err := m.osInterface.Remove(path); err != nil && !os.IsNotExist(err) {
 		return fmt.Errorf("failed to remove container %q log %q: %v", containerID, path, err)
 	}
@@ -849,10 +851,40 @@ func (m *kubeGenericRuntimeManager) removeContainerLog(containerID string) error
 	// TODO(random-liu): Remove this after cluster logging supports CRI container log path.
 	legacySymlink := legacyLogSymlink(containerID, labeledInfo.ContainerName, labeledInfo.PodName,
 		labeledInfo.PodNamespace)
+	glog.Infof("\n\n********************************************************Avesh remove sym link: %v\n\n", legacySymlink)
 	if err := m.osInterface.Remove(legacySymlink); err != nil && !os.IsNotExist(err) {
 		return fmt.Errorf("failed to remove container %q log legacy symbolic link %q: %v",
 			containerID, legacySymlink, err)
 	}
+	return nil
+}
+
+// removeContainerLog removes the container log.
+func (m *kubeGenericRuntimeManager) createContainerLogIfNotExist(containerID string) error {
+	// Remove the container log.
+	status, err := m.runtimeService.ContainerStatus(containerID)
+	if err != nil {
+		return fmt.Errorf("failed to get container status %q: %v", containerID, err)
+	}
+
+	glog.Infof("\n\n*******************Avesh: createContainerLogIfNotExist: %#v\n\n", status.Labels)
+	labeledInfo := getContainerInfoFromLabels(status.Labels)
+	annotatedInfo := getContainerInfoFromAnnotations(status.Annotations)
+	path := buildFullContainerLogsPath(labeledInfo.PodUID, labeledInfo.ContainerName, annotatedInfo.RestartCount)
+	glog.Infof("\n\n**************************************************************Avesh create full path: %v\n\n", path)
+	/*if _, err := os.Stat(path); err == nil {
+		// path already exists
+		return nil
+	}*/
+
+	legacySymlink := legacyLogSymlink(containerID, labeledInfo.ContainerName, labeledInfo.PodName,
+		labeledInfo.PodNamespace)
+	glog.Infof("\n\n*****************************************************************Avesh create sym link: %v\n\n", legacySymlink)
+
+	/*if err := m.osInterface.Symlink(path, legacySymlink); err != nil {
+		return fmt.Errorf("*****************************************************************************failed to create container %q log legacy symbolic link %q: %v",
+			containerID, legacySymlink, err)
+	}*/
 	return nil
 }
 
