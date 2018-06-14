@@ -2,8 +2,6 @@ package node
 
 import (
 	"fmt"
-	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/golang/glog"
@@ -11,20 +9,6 @@ import (
 	nodeoptions "github.com/openshift/origin/pkg/cmd/server/kubernetes/node/options"
 	cmdutil "github.com/openshift/origin/pkg/cmd/util"
 )
-
-// safeArgRegexp matches only characters that are known safe. DO NOT add to this list
-// without fully considering whether that new character can be used to break shell escaping
-// rules.
-var safeArgRegexp = regexp.MustCompile(`^[\da-zA-Z\-=_\.,/\:]+$`)
-
-// shellEscapeArg quotes an argument if it contains characters that my cause a shell
-// interpreter to split the single argument into multiple.
-func shellEscapeArg(s string) string {
-	if safeArgRegexp.MatchString(s) {
-		return s
-	}
-	return strconv.Quote(s)
-}
 
 // FinalizeNodeConfig controls the node configuration before it is used by the Kubelet
 func FinalizeNodeConfig(nodeConfig *configapi.NodeConfig) error {
@@ -53,7 +37,7 @@ func WriteKubeletFlags(nodeConfig configapi.NodeConfig) error {
 	}
 	var outputArgs []string
 	for _, s := range kubeletArgs {
-		outputArgs = append(outputArgs, shellEscapeArg(s))
+		outputArgs = append(outputArgs, s)
 	}
 	fmt.Println(strings.Join(outputArgs, " "))
 	return nil

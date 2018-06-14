@@ -3,7 +3,9 @@ package node
 import (
 	"fmt"
 	"net"
+	"regexp"
 	"sort"
+	//"strconv"
 	"strings"
 
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -16,6 +18,21 @@ import (
 	"github.com/openshift/origin/pkg/cmd/util/variable"
 	"github.com/openshift/origin/pkg/network"
 )
+
+// safeArgRegexp matches only characters that are known safe. DO NOT add to this list
+// without fully considering whether that new character can be used to break shell escaping
+// rules.
+var safeArgRegexp = regexp.MustCompile(`^[\da-zA-Z\-=_\.,/\:]+$`)
+
+// shellEscapeArg quotes an argument if it contains characters that my cause a shell
+// interpreter to split the single argument into multiple.
+func shellEscapeArg(s string) string {
+	if safeArgRegexp.MatchString(s) {
+		return s
+	}
+	//return strconv.Quote(s)
+	return fmt.Sprintf("\"%v\"", s)
+}
 
 // ComputeKubeletFlags returns the flags to use when starting the kubelet.
 func ComputeKubeletFlags(startingArgs map[string][]string, options configapi.NodeConfig) ([]string, error) {
@@ -127,7 +144,11 @@ func ComputeKubeletFlags(startingArgs map[string][]string, options configapi.Nod
 	var arguments []string
 	for _, key := range keys {
 		for _, token := range args[key] {
-			arguments = append(arguments, fmt.Sprintf("--%s=%v", key, token))
+			if len(token) > 0 {
+				arguments = append(arguments, fmt.Sprintf("--%s=%v", key, shellEscapeArg(token)))
+			} else {
+				arguments = append(arguments, fmt.Sprintf("--%s=%v", key, token))
+			}
 		}
 	}
 	return arguments, nil
